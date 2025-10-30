@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion-Based Music Recommender</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f6f6fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px rgba(80, 80, 160, 0.08);
+            padding: 40px 32px 32px 32px;
+        }
+        .title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4b2996;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .title i {
+            color: #7c3aed;
+            margin-right: 10px;
+        }
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 32px 0 18px 0;
+            color: #222;
+        }
+        .flex-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 32px;
+            margin-bottom: 24px;
+        }
+        .preview-box {
+            width: 350px;
+            height: 180px;
+            background: #222;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .image-preview {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            border-radius: 18px;
+        }
+        .upload-side {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            min-width: 220px;
+        }
+        .upload-label {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #444;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .upload-label i {
+            color: #fbbf24;
+            font-size: 1.3em;
+        }
+        .file-input {
+            margin-top: 4px;
+        }
+        .analyze-btn {
+            margin-top: 18px;
+            background: linear-gradient(90deg, #7c3aed 60%, #4b2996 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08);
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .analyze-btn:active {
+            background: #4b2996;
+        }
+        .emotion-status {
+            margin-left: 32px;
+            font-size: 1.1rem;
+            color: #222;
+            font-weight: 500;
+            align-self: center;
+        }
+        .song-card {
+            background: #f8f7fc;
+            border-radius: 18px;
+            padding: 32px 24px 24px 24px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            min-height: 120px;
+        }
+        .album-cover {
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #bbb;
+            margin-right: 12px;
+        }
+        .song-details {
+            flex: 1;
+        }
+        .song-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #222;
+        }
+        .artist-name {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 2px;
+        }
+        .play-btn {
+            background: #4b2996;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 28px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-left: 18px;
+        }
+        .play-btn:active {
+            background: #7c3aed;
+        }
+        .error-message {
+            color: #dc3545;
+            margin-top: 10px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        @media (max-width: 900px) {
+            .container { padding: 18px 2vw; }
+            .flex-row { flex-direction: column; gap: 18px; }
+            .preview-box { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title"><i class="fa fa-music"></i> Emotion-Based Music Recommender</div>
+        <div class="section-header">How are you feeling today?</div>
+        <div class="flex-row">
+            <div class="preview-box">
+                <div class="image-preview" id="imagePreview"></div>
+            </div>
+            <div class="upload-side">
+                <label class="upload-label"><i class="fa fa-folder"></i> Upload Image</label>
+                <input type="file" accept="image/*" class="file-input">
+                <button class="analyze-btn"><i class="fa fa-search"></i> Analyze Emotion</button>
+            </div>
+            <div class="emotion-status" id="emotionStatus">Detected Emotion: None</div>
+        </div>
+        <div class="error-message" style="display: none;"></div>
+        <div class="section-header">Songs for your current mood:</div>
+        <div class="song-card">
+            <div class="album-cover"><img id="albumImg" src="https://img.icons8.com/ios-filled/50/cccccc/musical-notes.png" alt="Album Cover" width="40" height="40"></div>
+            <div class="song-details">
+                <div class="song-title" id="songTitle">Song Title</div>
+                <div class="artist-name" id="artistName">Artist Name</div>
+            </div>
+            <button class="play-btn" id="playBtn"><i class="fa fa-play"></i> Play</button>
+        </div>
+    </div>
+    <script>
+        const fileInput = document.querySelector('.file-input');
+        const imagePreview = document.getElementById('imagePreview');
+        const analyzeBtn = document.querySelector('.analyze-btn');
+        const emotionStatus = document.getElementById('emotionStatus');
+        const playBtn = document.getElementById('playBtn');
+        const errorMessage = document.querySelector('.error-message');
+        const songTitle = document.getElementById('songTitle');
+        const artistName = document.getElementById('artistName');
+        let currentImage = null;
+        let isPlaying = false;
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    currentImage = e.target.result;
+                    imagePreview.style.backgroundImage = `url('${currentImage}')`;
+                    errorMessage.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        analyzeBtn.addEventListener('click', async () => {
+            if (!currentImage) {
+                showError('Please upload an image first');
+                return;
+            }
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Analyzing...';
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: currentImage })
+                });
+                const data = await response.json();
+                if (data.error) {
+                    showError(data.error);
+                    emotionStatus.textContent = 'Detected Emotion: None';
+                    songTitle.textContent = 'Song Title';
+                    artistName.textContent = 'Artist Name';
+                } else {
+                    emotionStatus.textContent = `Detected Emotion: ${data.emotion}`;
+                    if (data.song) {
+                        songTitle.textContent = data.song;
+                        artistName.textContent = 'Playing...';
+                        playBtn.innerHTML = '<i class="fa fa-pause"></i> Pause';
+                        isPlaying = true;
+                    } else {
+                        songTitle.textContent = 'No matching song found';
+                        artistName.textContent = '';
+                        playBtn.innerHTML = '<i class="fa fa-play"></i> Play';
+                        isPlaying = false;
+                    }
+                    errorMessage.style.display = 'none';
+                }
+            } catch (error) {
+                showError('Error analyzing image');
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = '<i class="fa fa-search"></i> Analyze Emotion';
+            }
+        });
+
+        playBtn.addEventListener('click', async () => {
+            if (!isPlaying) {
+                // Resume song
+                const response = await fetch('/control', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'resume' })
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    playBtn.innerHTML = '<i class="fa fa-pause"></i> Pause';
+                    isPlaying = true;
+                }
+            } else {
+                // Stop song
+                const response = await fetch('/control', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'stop' })
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    playBtn.innerHTML = '<i class="fa fa-play"></i> Play';
+                    isPlaying = false;
+                }
+            }
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+    </script>
+</body>
+</html> 

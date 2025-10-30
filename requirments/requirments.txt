@@ -1,0 +1,23 @@
+Core Technologies:
+Programming Language: Python
+GUI Framework: Tkinter
+Computer Vision: OpenCV
+Deep Learning: Keras/TensorFlow
+Audio Processing: Pygame
+Image Processing: PIL (Python Imaging Library)
+
+
+
+System Requirements:
+Python 3.7.0
+
+
+Required libraries:
+OpenCV
+Keras/TensorFlow
+Pygame
+PIL
+NumPy
+Webcam (for live detection)
+Audio output device
+Sufficient RAM for model loading

@@ -1,0 +1,148 @@
+.flex-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  margin-bottom: 24px;
+}
+
+.preview-box {
+  width: 350px;
+  height: 180px;
+  background: #222;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.upload-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.emotion-status {
+  margin-left: 32px;
+  font-size: 1.1rem;
+  color: #222;
+  font-weight: 500;
+  align-self: center;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f6f6fa;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(80, 80, 160, 0.08);
+  padding: 40px 32px 32px 32px;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #4b2996;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+.section-header {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 32px 0 18px 0;
+  color: #222;
+}
+
+.analyze-btn {
+  margin-top: 18px;
+  background: linear-gradient(90deg, #7c3aed 60%, #4b2996 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08);
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.analyze-btn:active {
+  background: #4b2996;
+}
+
+.song-card {
+  background: #f8f7fc;
+  border-radius: 18px;
+  padding: 32px 24px 24px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-height: 120px;
+}
+
+.album-cover {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #bbb;
+  margin-right: 12px;
+}
+
+.song-details {
+  flex: 1;
+}
+
+.song-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.artist-name {
+  font-size: 1rem;
+  color: #666;
+  margin-top: 2px;
+}
+
+.play-btn {
+  background: #4b2996;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 28px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 18px;
+}
+
+.play-btn:active {
+  background: #7c3aed;
+}
+
+@media (max-width: 900px) {
+  .container { padding: 18px 2vw; }
+  .flex-row { flex-direction: column; gap: 18px; }
+  .preview-box { width: 100%; }
+} 
